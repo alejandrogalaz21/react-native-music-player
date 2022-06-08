@@ -25,15 +25,15 @@ const MusicPlayer = () => {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="heart-outline" size={30} color="#888888" />
+            <Ionicons name="repeat" size={30} color="#888888" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="heart-outline" size={30} color="#888888" />
+            <Ionicons name="share-outline" size={30} color="#888888" />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="heart-outline" size={30} color="#888888" />
+            <Ionicons name="ellipsis-horizontal" size={30} color="#888888" />
           </TouchableOpacity>
         </View>
       </View>

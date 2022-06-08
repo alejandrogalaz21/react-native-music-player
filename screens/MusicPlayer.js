@@ -4,9 +4,11 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import songs from './../model/data'
 
 const { width, height } = Dimensions.get('window')
 
@@ -15,6 +17,9 @@ const MusicPlayer = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
         {/* image */}
+        <View style={[styles.imageWrapper, styles.elevation]}>
+          <Image style={styles.musicImage} source={songs[0].artwork} />
+        </View>
         {/* slider */}
         {/* music controls */}
       </View>
@@ -62,6 +67,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%'
+  },
+  imageWrapper: {
+    width: 300,
+    height: 340,
+    marginBottom: 25
+  },
+  musicImage: { width: '100%', height: '100%', borderRadius: 15 },
+  elevation: {
+    elevation: 5,
+    shadowColor: '#ccc',
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84
   }
 })
 

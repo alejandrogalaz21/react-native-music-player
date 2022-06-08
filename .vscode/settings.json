@@ -1,0 +1,8 @@
+{
+  "editor.suggest.showWords": false,
+  "editor.tabCompletion": "on",
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "[javascript]": {
+    "editor.suggest.showWords": false
+  }
+}

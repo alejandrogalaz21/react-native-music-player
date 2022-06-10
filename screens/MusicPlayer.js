@@ -62,37 +62,84 @@ function ButtonsPanel() {
   )
 }
 
+function ImageSong() {
+  return (
+    <View style={[styles.imageWrapper, styles.elevation]}>
+      <Image style={styles.musicImage} source={songs[0].artwork} />
+    </View>
+  )
+}
+
+function SongInfo() {
+  return (
+    <View>
+      <Text style={[styles.songInfo, styles.songTitle]}>{songs[0].title}</Text>
+      <Text style={[styles.songInfo, styles.songArtist]}>
+        {songs[0].artist}
+      </Text>
+    </View>
+  )
+}
+
+function SongSlider() {
+  return (
+    <View style={styles.sliderContainer}>
+      <Slider
+        style={styles.progressBar}
+        value={50}
+        minimumValue={0}
+        maximumValue={100}
+        thumbTintColor="#FFD369"
+        minimumTrackTintColor="#FFD369"
+        maximumTrackTintColor="#fff"
+        onSlidingComplete={value => console.log(value)}
+      />
+    </View>
+  )
+}
+
+function SongDuration() {
+  return (
+    <View style={[styles.progressDuration]}>
+      <Text style={[styles.progressDurationLabel]}>00:00</Text>
+      <Text style={[styles.progressDurationLabel]}>00:00</Text>
+    </View>
+  )
+}
+
 const MusicPlayer = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
         {/* image */}
-        <View style={[styles.imageWrapper, styles.elevation]}>
-          <Image style={styles.musicImage} source={songs[0].artwork} />
-        </View>
+        <ImageSong />
         {/* song info */}
-        <View>
-          <Text style={[styles.songInfo, styles.songTitle]}>
-            {songs[0].title}
-          </Text>
-          <Text style={[styles.songInfo, styles.songArtist]}>
-            {songs[0].artist}
-          </Text>
-        </View>
+        <SongInfo />
         {/* slider */}
-        <View style={styles.sliderContainer}>
-          <Slider
-            style={styles.progressBar}
-            value={50}
-            minimumValue={0}
-            maximumValue={100}
-            thumbTintColor="#FFD369"
-            minimumTrackTintColor="#FFD369"
-            maximumTrackTintColor="#fff"
-            onSlidingComplete={value => console.log(value)}
+        <SongSlider />
+        {/* song duration */}
+        <SongDuration />
+        {/* music controls */}
+        <View style={styles.musicControlsContainer}>
+          <Button
+            icon="play-skip-back-outline"
+            size={35}
+            color="#FFD369"
+            action={() => console.log('Pressed like')}
+          />
+          <Button
+            icon="ios-pause-circle"
+            size={75}
+            color="#FFD369"
+            action={() => console.log('Pressed like')}
+          />
+          <Button
+            icon="play-skip-forward-outline"
+            size={35}
+            color="#FFD369"
+            action={() => console.log('Pressed like')}
           />
         </View>
-        {/* music controls */}
       </View>
       <ButtonsPanel />
     </SafeAreaView>
@@ -124,7 +171,8 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: 300,
     height: 340,
-    marginBottom: 25
+    marginBottom: 20,
+    marginTop: 20
   },
   musicImage: { width: '100%', height: '100%', borderRadius: 15 },
   elevation: {
@@ -150,6 +198,23 @@ const styles = StyleSheet.create({
     height: 40,
     marginTop: 25,
     flexDirection: 'row'
+  },
+  progressDuration: {
+    width: 340,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  progressDurationLabel: {
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: '500'
+  },
+  musicControlsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '60%',
+    marginTop: 15
   }
 })
 

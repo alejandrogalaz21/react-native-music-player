@@ -1,13 +1,13 @@
-import { StatusBar } from 'expo-status-bar'
+// import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, StatusBar } from 'react-native'
 import MusicPlayer from './screens/MusicPlayer'
 
 export default function App() {
   return (
     <View style={styles.container}>
       <MusicPlayer />
-      <StatusBar style="auto" />
+      <StatusBar style="light-content" />
     </View>
   )
 }

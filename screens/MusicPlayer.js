@@ -12,6 +12,26 @@ import songs from './../model/data'
 
 const { width, height } = Dimensions.get('window')
 
+function Button(icon, size, color) {
+  return (
+    <TouchableOpacity onPress={() => {}}>
+      <Ionicons name="ellipsis-horizontal" size={30} color="#888888" />
+    </TouchableOpacity>
+  )
+}
+
+function ButtonsPanel() {
+  return (
+    <View style={styles.bottomContainer}>
+      <View style={styles.bottomContainerIconWrapper}>
+        <Button name="heart-outline" size={30} color="#888888" />
+        <Button name="repeat" size={30} color="#888888" />
+        <Button name="share-outline" size={30} color="#888888" />
+      </View>
+    </View>
+  )
+}
+
 const MusicPlayer = () => {
   return (
     <SafeAreaView style={styles.container}>
@@ -23,25 +43,7 @@ const MusicPlayer = () => {
         {/* slider */}
         {/* music controls */}
       </View>
-      <View style={styles.bottomContainer}>
-        <View style={styles.bottomContainerIconWrapper}>
-          <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="heart-outline" size={30} color="#888888" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="repeat" size={30} color="#888888" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="share-outline" size={30} color="#888888" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => {}}>
-            <Ionicons name="ellipsis-horizontal" size={30} color="#888888" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <ButtonsPanel />
     </SafeAreaView>
   )
 }

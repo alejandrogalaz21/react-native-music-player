@@ -72,12 +72,14 @@ function ImageSong({ item, index }) {
   )
 }
 
-function SongInfo() {
+function SongInfo({ index = 0 }) {
   return (
     <View>
-      <Text style={[styles.songInfo, styles.songTitle]}>{songs[0].title}</Text>
+      <Text style={[styles.songInfo, styles.songTitle]}>
+        {songs[index].title}
+      </Text>
       <Text style={[styles.songInfo, styles.songArtist]}>
-        {songs[0].artist}
+        {songs[index].artist}
       </Text>
     </View>
   )
@@ -110,20 +112,23 @@ function SongDuration() {
 }
 
 const MusicPlayer = () => {
+  const [songIndex, setSongIndex] = useState(0)
   const scrollX = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     scrollX.addListener(({ value }) => {
       const index = Math.round(value / width)
-      console.log(
-        `scrollX: ${value} | Device width: ${width} | Index: ${index}`
-      )
+      // console.log(
+      //   `scrollX: ${value} | Device width: ${width} | Index: ${index}`
+      // )
+      setSongIndex(index)
     })
   }, [])
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
+        {/* image */}
         <Animated.FlatList
           renderItem={ImageSong}
           data={songs}
@@ -143,11 +148,8 @@ const MusicPlayer = () => {
             { useNativeDriver: true }
           )}
         />
-
-        {/* image */}
-        {/* <ImageSong /> */}
         {/* song info */}
-        <SongInfo />
+        <SongInfo index={songIndex} />
         {/* slider */}
         <SongSlider />
         {/* song duration */}

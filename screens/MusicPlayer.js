@@ -5,28 +5,57 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Dimensions,
-  Image
+  Image,
+  Text
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import songs from './../model/data'
 
 const { width, height } = Dimensions.get('window')
 
-function Button(icon, size, color) {
+function Button({ icon, size, color, action }) {
+  console.log(icon)
   return (
-    <TouchableOpacity onPress={() => {}}>
-      <Ionicons name="ellipsis-horizontal" size={30} color="#888888" />
+    <TouchableOpacity onPress={action}>
+      <Ionicons name={icon} size={size} color={color} />
     </TouchableOpacity>
   )
 }
 
 function ButtonsPanel() {
+  function onPressLike() {
+    console.log('Pressed like')
+  }
+
+  function onPressRepeat() {
+    console.log('Pressed repeat')
+  }
+
+  function onPressShare() {
+    console.log('Pressed share')
+  }
+
   return (
     <View style={styles.bottomContainer}>
       <View style={styles.bottomContainerIconWrapper}>
-        <Button name="heart-outline" size={30} color="#888888" />
-        <Button name="repeat" size={30} color="#888888" />
-        <Button name="share-outline" size={30} color="#888888" />
+        <Button
+          icon="heart-outline"
+          size={30}
+          color="#888888"
+          action={onPressLike}
+        />
+        <Button
+          icon="repeat"
+          size={30}
+          color="#888888"
+          action={onPressRepeat}
+        />
+        <Button
+          icon="share-outline"
+          size={30}
+          color="#888888"
+          action={onPressShare}
+        />
       </View>
     </View>
   )
@@ -39,6 +68,15 @@ const MusicPlayer = () => {
         {/* image */}
         <View style={[styles.imageWrapper, styles.elevation]}>
           <Image style={styles.musicImage} source={songs[0].artwork} />
+        </View>
+        {/* song info */}
+        <View>
+          <Text style={[styles.songInfo, styles.songTitle]}>
+            {songs[0].title}
+          </Text>
+          <Text style={[styles.songInfo, styles.songArtist]}>
+            {songs[0].artist}
+          </Text>
         </View>
         {/* slider */}
         {/* music controls */}
@@ -82,6 +120,17 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.5,
     shadowRadius: 3.84
+  },
+  songInfo: {
+    color: '#fff',
+    textAlign: 'center'
+  },
+  songTitle: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  songArtist: {
+    fontSize: 16
   }
 })
 

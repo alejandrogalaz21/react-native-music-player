@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import {
   StyleSheet,
   View,
@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
-  Text
+  Text,
+  Animated
 } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Slider from '@react-native-community/slider'
@@ -62,11 +63,13 @@ function ButtonsPanel() {
   )
 }
 
-function ImageSong() {
+function ImageSong({ item, index }) {
   return (
-    <View style={[styles.imageWrapper, styles.elevation]}>
-      <Image style={styles.musicImage} source={songs[0].artwork} />
-    </View>
+    <Animated.View style={styles.imageContainer}>
+      <View style={[styles.imageWrapper, styles.elevation]}>
+        <Image style={styles.musicImage} source={item.artwork} />
+      </View>
+    </Animated.View>
   )
 }
 
@@ -108,11 +111,43 @@ function SongDuration() {
 }
 
 const MusicPlayer = () => {
+  const scrollX = useRef(new Animated.Value(0)).current
+
+  function onScrollAnimated() {
+    return Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: { x: scrollX }
+          }
+        }
+      ],
+      { useNativeDriver: true }
+    )
+  }
+
+  useEffect(() => {
+    scrollX.addListener(({ value }) => {
+      console.log({ value })
+    })
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
+        <Animated.FlatList
+          renderItem={ImageSong}
+          data={songs}
+          keyExtractor={item => item.id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          onScroll={onScrollAnimated}
+        />
+
         {/* image */}
-        <ImageSong />
+        {/* <ImageSong /> */}
         {/* song info */}
         <SongInfo />
         {/* slider */}
@@ -167,6 +202,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%'
+  },
+
+  imageContainer: {
+    width,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   imageWrapper: {
     width: 300,

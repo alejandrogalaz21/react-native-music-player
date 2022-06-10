@@ -16,7 +16,6 @@ import songs from './../model/data'
 const { width, height } = Dimensions.get('window')
 
 function Button({ icon, size, color, action }) {
-  console.log(icon)
   return (
     <TouchableOpacity onPress={action}>
       <Ionicons name={icon} size={size} color={color} />
@@ -113,22 +112,12 @@ function SongDuration() {
 const MusicPlayer = () => {
   const scrollX = useRef(new Animated.Value(0)).current
 
-  function onScrollAnimated() {
-    return Animated.event(
-      [
-        {
-          nativeEvent: {
-            contentOffset: { x: scrollX }
-          }
-        }
-      ],
-      { useNativeDriver: true }
-    )
-  }
-
   useEffect(() => {
     scrollX.addListener(({ value }) => {
-      console.log({ value })
+      const index = Math.round(value / width)
+      console.log(
+        `scrollX: ${value} | Device width: ${width} | Index: ${index}`
+      )
     })
   }, [])
 
@@ -143,7 +132,16 @@ const MusicPlayer = () => {
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          onScroll={onScrollAnimated}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: { x: scrollX }
+                }
+              }
+            ],
+            { useNativeDriver: true }
+          )}
         />
 
         {/* image */}

@@ -5,3 +5,138 @@
 - [react-native-vector-icons](https://github.com/oblador/react-native-vector-icons#installation)
 - [List Of Icons](https://oblador.github.io/react-native-vector-icons/)
 - [react-native-slider](https://github.com/callstack/react-native-slider)
+- [react-native-track-player repo](https://github.com/doublesymmetry/react-native-track-player)
+- [react-native-track-player docs](https://react-native-track-player.js.org/docs/basics/installation)
+
+##React Track Player Android Configuration:
+
+#Change the build.gradle fiel:
+
+```gradle
+import org.apache.tools.ant.taskdefs.condition.Os
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '31.0.0'
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '31')
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '31')
+        if (findProperty('android.kotlinVersion')) {
+            kotlinVersion = findProperty('android.kotlinVersion')
+        }
+        frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
+
+        if (System.properties['os.arch'] == 'aarch64') {
+            // For M1 Users we need to use the NDK 24 which added support for aarch64
+            ndkVersion = '24.0.8215888'
+        } else {
+            // Otherwise we default to the side-by-side NDK version from AGP.
+            ndkVersion = '21.4.7075529'
+        }
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath('com.android.tools.build:gradle:7.0.4')
+        classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('de.undercouch:gradle-download-task:4.1.2')
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(new File(['node', '--print', "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), '../android'))
+        }
+        maven {
+            // Android JSC is installed from npm
+            url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
+        }
+
+        google()
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup 'com.facebook.react'
+            }
+        }
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+
+```
+
+to :
+
+```gradle
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = findProperty('android.buildToolsVersion') ?: '31.0.0'
+        minSdkVersion = Integer.parseInt(findProperty('android.minSdkVersion') ?: '21')
+        compileSdkVersion = Integer.parseInt(findProperty('android.compileSdkVersion') ?: '31')
+        targetSdkVersion = Integer.parseInt(findProperty('android.targetSdkVersion') ?: '31')
+        if (findProperty('android.kotlinVersion')) {
+            kotlinVersion = findProperty('android.kotlinVersion')
+        }
+        frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
+
+        if (System.properties['os.arch'] == 'aarch64') {
+            // For M1 Users we need to use the NDK 24 which added support for aarch64
+            ndkVersion = '24.0.8215888'
+        } else {
+            // Otherwise we default to the side-by-side NDK version from AGP.
+            ndkVersion = '21.4.7075529'
+        }
+    }
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath('com.android.tools.build:gradle:7.0.4')
+        classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('de.undercouch:gradle-download-task:4.1.2')
+        classpath('com.google.gms:google-services:4.3.3')
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(new File(['node', '--print', "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), '../android'))
+        }
+        maven {
+            // Android JSC is installed from npm
+            url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
+        }
+        google()
+        jcenter()
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup 'com.facebook.react'
+            }
+        }
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+
+```

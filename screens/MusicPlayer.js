@@ -9,11 +9,30 @@ import {
   Text,
   Animated
 } from 'react-native'
+import TrackPlayer, {
+  Capability,
+  Event,
+  RepeatMode,
+  State,
+  usePlaybackState,
+  useProgress,
+  useTrackPlayerEvents
+} from 'react-native-track-player'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Slider from '@react-native-community/slider'
+
 import songs from './../model/data'
 
 const { width, height } = Dimensions.get('window')
+
+const setUpTrackPlayer = async () => {
+  try {
+    await TrackPlayer.setupPlayer()
+    await TrackPlayer.add(songs)
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 function Button({ icon, size, color, action }) {
   return (
@@ -118,9 +137,9 @@ const MusicPlayer = () => {
   useEffect(() => {
     scrollX.addListener(({ value }) => {
       const index = Math.round(value / width)
-      // console.log(
-      //   `scrollX: ${value} | Device width: ${width} | Index: ${index}`
-      // )
+      console.log(
+        `scrollX: ${value} | Device width: ${width} | Index: ${index}`
+      )
       setSongIndex(index)
     })
   }, [])

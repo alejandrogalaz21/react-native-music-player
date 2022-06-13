@@ -25,15 +25,6 @@ import songs from './../model/data'
 
 const { width, height } = Dimensions.get('window')
 
-const setUpTrackPlayer = async () => {
-  try {
-    await TrackPlayer.setupPlayer()
-    await TrackPlayer.add(songs)
-  } catch (error) {
-    console.error(error)
-  }
-}
-
 function Button({ icon, size, color, action }) {
   return (
     <TouchableOpacity onPress={action}>
@@ -130,25 +121,73 @@ function SongDuration() {
   )
 }
 
+const setUpTrackPlayer = async () => {
+  try {
+    await TrackPlayer.setupPlayer()
+    await TrackPlayer.add(songs)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 const MusicPlayer = () => {
+  // custom states
+  const playBackState = usePlaybackState()
   const [songIndex, setSongIndex] = useState(0)
+  // custom refs
   const scrollX = useRef(new Animated.Value(0)).current
+  // flatlist ref
+  const songSlider = useRef(null)
 
   useEffect(() => {
+    setUpTrackPlayer()
     scrollX.addListener(({ value }) => {
-      const index = Math.round(value / width)
+      const index = getIndex(value, width)
       console.log(
         `scrollX: ${value} | Device width: ${width} | Index: ${index}`
       )
       setSongIndex(index)
     })
+
+    // return () => {
+    //   scrollX.removeAllListeners()
+    // }
   }, [])
+
+  const getIndex = (value, width) => Math.round(value / width)
+
+  const togglePlayback = async playBackState => {
+    const currentTrack = await TrackPlayer.getCurrentTrack()
+    if (currentTrack !== null) {
+      if (playBackState === State.Playing) {
+        await TrackPlayer.pause()
+      } else {
+        await TrackPlayer.play()
+      }
+    }
+  }
+
+  const skipToNext = () => {
+    const nextSong = (songIndex + 1) * width
+    songSlider.current.scrollToOffset({ offset: nextSong })
+    const index = getIndex(nextSong, width)
+    console.log(`Skip to next song: ${nextSong}, index : ${index}`)
+  }
+
+  const skipToPrevious = () => {
+    const previousSong = (songIndex - 1) * width
+    console.log({ previousSong })
+    songSlider.current.scrollToOffset({ offset: previousSong })
+    const index = getIndex(previousSong, width)
+    console.log(`Skip to previous song: ${previousSong}, index : ${index}`)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
         {/* image */}
         <Animated.FlatList
+          ref={songSlider}
           renderItem={ImageSong}
           data={songs}
           keyExtractor={item => item.id}
@@ -179,19 +218,23 @@ const MusicPlayer = () => {
             icon="play-skip-back-outline"
             size={35}
             color="#FFD369"
-            action={() => console.log('Pressed like')}
+            action={skipToPrevious}
           />
           <Button
-            icon="ios-pause-circle"
+            icon={
+              playBackState === State.Playing
+                ? 'ios-pause-circle'
+                : 'ios-play-circle'
+            }
             size={75}
             color="#FFD369"
-            action={() => console.log('Pressed like')}
+            action={() => togglePlayback(playBackState)}
           />
           <Button
             icon="play-skip-forward-outline"
             size={35}
             color="#FFD369"
-            action={() => console.log('Pressed like')}
+            action={skipToNext}
           />
         </View>
       </View>
